@@ -9,29 +9,24 @@ function App() {
   const [error, setError] = useState("");
 
   const handleSave = async () => {
-    console.log("Intentando guardar ítem:", { name, price });
-
-    try {
-      const priceValue = parseFloat(price);
-      if (isNaN(priceValue) || priceValue <= 0) {
-        throw new Error("El precio debe ser un número mayor a 0");
-      }
-
-      const docRef = await addDoc(collection(db, "items"), {
-        name,
-        price: priceValue,
-      });
-      console.log("Ítem añadido correctamente con ID:", docRef.id);
-      alert("Ítem añadido correctamente");
-      setShowModal(false);
-      setName("");
-      setPrice("");
-      setError("");
-    } catch (error) {
-      console.error("Error al guardar el ítem:", error.message, error);
-      setError(`Error al guardar el ítem: ${error.message}`);
+  try {
+    const priceValue = parseFloat(price);
+    if (isNaN(priceValue) || priceValue <= 0) {
+      throw new Error("El precio debe ser un número mayor a 0");
     }
-  };
+
+    await addDoc(collection(db, "items"), {
+      name,
+      price: priceValue,
+    });
+
+    alert("Ítem añadido correctamente");
+    setName("");
+    setPrice("");
+  } catch (error) {
+    console.error("Error al guardar el ítem:", error.message);
+  }
+};
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
